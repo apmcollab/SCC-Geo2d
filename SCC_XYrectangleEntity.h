@@ -203,12 +203,12 @@ GeometricEntity*  newDuplicateEntity() const
 void  output(std::ostream& out_stream) const
 {
    out_stream << "[BEGIN_ENTITY]\n";
-   out_stream <<  GeometricEntity::getGeoTypeString(SCC::GeoType::XY_RECTANGLE) << "\n";
+   out_stream <<  GeometricEntity::getGeoTypeString(SCC::GeoType::XY_RECTANGLE) + "\n";
    out_stream << "[ENTITY_DATA]\n";
    out_stream << x_a << "   " <<  y_a  <<  '\n';
    out_stream << x_b << "   " <<  y_b  <<  '\n';
    out_stream << orientation << '\n';
-   out_stream << "[END_ENTITY]";
+   out_stream << "[END_ENTITY]\n";
 }
 friend std::ostream&  operator <<(std::ostream& out_stream, const SCC::XYrectangleEntity& A)
 {

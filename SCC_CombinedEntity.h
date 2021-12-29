@@ -118,6 +118,108 @@ GeometricEntity*  newDuplicateEntity() const
 	CombinedEntity* R = new CombinedEntity(*this);
 	return  R;
 }
+
+//
+//********************************************************************************
+//                    OUTPUT
+//********************************************************************************
+//
+friend std::ostream&  operator  <<(std::ostream& out_stream, const SCC::CombinedEntity& A)
+{
+   out_stream << "[BEGIN_ENTITY]" << "\n";
+   out_stream <<  GeometricEntity::getGeoTypeString(SCC::GeoType::COMBINED) << "\n";
+   out_stream << "[ENTITY_DATA]" << "\n";
+
+   for(long i = 0; i < A.getEntityCount(); i++)
+   {
+     out_stream << A[i];
+   }
+   out_stream << "[END_ENTITY]\n";
+   return(out_stream);
+}
+
+
+friend std::istream& operator >>(std::istream& in_stream, SCC::CombinedEntity& A)
+{
+    CircleEntity         C;
+    XYrectangleEntity    R;
+    PolygonEntity        P;
+
+	std::string str;
+	char delim = '\n';
+    std::getline(in_stream,str,delim); // [BEGIN_ENTITY]
+    std::getline(in_stream,str,delim); // SCC_GeoType_COMBINED
+    std::getline(in_stream,str,delim); // [ENTITY_DATA]
+
+    while(!(in_stream.eof()))
+    {
+    std::getline(in_stream,str,delim); // [BEGIN_ENTITY]
+    if(str.compare("[END_ENTITY]") == 0) break;
+
+    std::getline(in_stream,str,delim); // SCC_GeoType_XXX
+    if(str.compare("SCC_GeoType_CIRCLE") == 0)
+    {
+        C.initialize();
+    	C.inputData(in_stream);
+    	A.addEntity("SCC_GeoType_CIRCLE",C);
+        std::getline(in_stream,str,delim);
+    }
+    else if(str.compare("SCC_GeoType_XY_RECTANGLE") == 0)
+    {
+        R.initialize();
+    	R.inputData(in_stream);
+    	A.addEntity("SCC_GeoType_XY_RECTANGLE",R);
+        std::getline(in_stream,str,delim);
+    }
+    else if(str.compare("SCC_GeoType_POLYGON") == 0)
+    {
+        P.initialize();
+    	P.inputData(in_stream);
+    	A.addEntity("SCC_GeoType_POLYGON",P);
+    	std::getline(in_stream,str,delim);
+    }
+
+
+    }
+
+
+    /*
+    std::getline(in_stream,str,delim); // [ENTITY_DATA]
+
+    in_stream.getline(nameInput,256);   // clear eol
+    in_stream.getline(nameInput,256);   // Name of entry
+    if(strcmp(nameInput,"[END_ENTITY]")==0) return(in_stream);
+
+    in_stream >> lineInput;
+    while(strcmp(lineInput,"[BEGIN_ENTITY]")==0)
+    {
+    in_stream >> lineInput;  // class name
+
+    if(strcmp(lineInput,"CAMcircleEntity") == 0)
+    {
+      C.inputData(in_stream);
+      A.addEntity(nameInput,C);
+    }
+    if(strcmp(lineInput,"CAMxyRectangleEntity") == 0)
+    {
+      R.inputData(in_stream);
+      A.addEntity(nameInput,R);
+    }
+    if(strcmp(lineInput,"CAMpolygonEntity") == 0)
+    {
+      P.inputData(in_stream);
+      A.addEntity(nameInput,P);
+    }
+
+    in_stream.getline(nameInput,256);    // clear eol
+    in_stream.getline(nameInput,256);
+    if(strcmp(nameInput,"[END_ENTITY]")==0) return(in_stream);
+	 in_stream >> lineInput;
+    }
+    */
+    return(in_stream);
+}
+
 //
 //********************************************************************************
 //                    Equality/Inequality

@@ -348,7 +348,7 @@ void getConstructorData(std::vector<double>& D, std::vector<long>& L, std::strin
 void output(std::ostream& out_stream) const
 {
    out_stream << "[BEGIN_ENTITY]\n";
-   out_stream <<  GeometricEntity::getGeoTypeString(SCC::GeoType::POLYGON) << "\n";
+   out_stream <<  GeometricEntity::getGeoTypeString(SCC::GeoType::POLYGON) +  "\n";
    out_stream << "[ENTITY_DATA]\n";
    out_stream <<  n  <<  '\n';
 

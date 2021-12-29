@@ -241,7 +241,7 @@ void output(std::ostream& out_stream) const
    out_stream << center_x << "  " << center_y <<  '\n';
    out_stream << radius   <<  '\n';
    out_stream << orientation << '\n';
-   out_stream << "[END_ENTITY]";
+   out_stream << "[END_ENTITY]\n";
 }
 friend std::ostream&  operator <<(std::ostream& out_stream, const SCC::CircleEntity& A)
 {
@@ -259,8 +259,8 @@ void input(std::istream& in_stream)
 {
 	std::string str;
 	char delim = '\n';
-    std::getline(in_stream,str,delim);
-    std::getline(in_stream,str,delim);
+    std::getline(in_stream,str,delim); // [BEGIN_ENTITY]
+    std::getline(in_stream,str,delim); // SCC_GeoType_CIRCLE
     inputData(in_stream);
 }
 
@@ -268,13 +268,13 @@ void inputData(std::istream& in_stream)
 {
 	std::string str;
 	char delim = '\n';
-    std::getline(in_stream,str,delim);
+    std::getline(in_stream,str,delim);  // [ENTITY_DATA]
     in_stream >> center_x;
     in_stream >> center_y;
     in_stream >> radius;
     in_stream >> orientation;
-    std::getline(in_stream,str,delim);
-    line_tolerance = 1.0e-8;
+    std::getline(in_stream,str,delim); // [END_ENTITY]
+    line_tolerance = LINE_TOLERANCE;
 }
 
 

@@ -83,7 +83,7 @@ void initialize(const CombinedEntity& E)
     initialize();
     if(E.entityList.size() == 0) {return;}
 
-    entityCount = E.entityList.size();
+    entityCount = (long)E.entityList.size();
 
     entityList.resize(entityCount, nullptr);
     entityNameList.resize(entityCount,"");

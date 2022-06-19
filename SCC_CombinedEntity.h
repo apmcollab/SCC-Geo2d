@@ -25,6 +25,9 @@
 #############################################################################
 */
 #include "SCC_GeometricEntity.h"
+#include "SCC_CircleEntity.h"
+#include "SCC_XYrectangleEntity.h"
+#include "SCC_PolygonEntity.h"
 
 #ifndef SCC_COMBINEDENTITY_
 #define SCC_COMBINEDENTITY_

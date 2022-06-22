@@ -697,7 +697,7 @@ int interiorExteriorTest(double xTest, double yTest) const
     theta1 = theta2;
     }
      
-    if((fabs(solidAngle - pi2) < tol)||(fabs(solidAngle + pi2) < tol))
+    if((std::abs(solidAngle - pi2) < tol)||(std::abs(solidAngle + pi2) < tol))
     {return 1*orientation;}
     return -1*orientation;
 }

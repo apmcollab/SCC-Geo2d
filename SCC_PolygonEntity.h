@@ -626,6 +626,13 @@ double getXcoordinate(double s) const
 {
     long segIndex = getSegmentIndex(s);
     double darc   = arcLengthBase[segIndex] - arcLengthBase[segIndex-1];
+
+    double xNorm = std::max(std::abs(x[segIndex-1]),std::abs(x[segIndex]));
+    if(std::abs(darc) < line_tolerance*(xNorm + 0.1))
+    {
+    	return x[segIndex-1];
+    }
+
     double sLocal = (s - arcLengthBase[segIndex-1])/darc;
 	return (1.0 - sLocal)*x[segIndex-1] + sLocal*x[segIndex];
 }
@@ -634,6 +641,14 @@ double getYcoordinate(double s) const
 {
 	long segIndex = getSegmentIndex(s);
     double darc   = arcLengthBase[segIndex] - arcLengthBase[segIndex-1];
+
+    double yNorm = std::max(std::abs(y[segIndex-1]),std::abs(y[segIndex]));
+    if(std::abs(darc) < line_tolerance*(yNorm + 0.1))
+    {
+    	return y[segIndex-1];
+    }
+
+
     double sLocal = (s - arcLengthBase[segIndex-1])/darc;
 	return (1.0 - sLocal)*y[segIndex-1] + sLocal*y[segIndex];
 }
@@ -648,6 +663,7 @@ int interiorExteriorTest(double xTest, double yTest) const
 //  Check to see if outside the bounding box
 //
     double tol = line_tolerance;
+
     if( xTest < BBoxXmin - tol) return -1*orientation;
     if( xTest > BBoxXmax + tol) return -1*orientation;
     if( yTest < BBoxYmin - tol) return -1*orientation;
@@ -739,6 +755,7 @@ int getSegmentIntersection(double& intersectPoint, double x_a,
     {
     linkRet =
     linkUtility.linkIntersection(Qx, Qy, &(x[i]),&(y[i]),line_tolerance, s);
+
     if(linkRet == 1)
     {
     pxQ = (1.0-s)*x_a + s*x_b;
@@ -748,6 +765,8 @@ int getSegmentIntersection(double& intersectPoint, double x_a,
     }
     i++;
     }
+
+
     if(linkRet == 1) return 1;
 	return 0;
 }

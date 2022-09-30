@@ -26,6 +26,7 @@
 */
 
 #include <vector>
+#include <cmath>
 
 #ifndef SCC_LINK_
 #define SCC_LINK_
@@ -56,6 +57,23 @@ double xp, double yp, double tol, double& s, double& d) const
     double xab  = (xa - xb);
     double yab  = (ya - yb);
 
+    //
+    // Code for when the endpoints of the links are very close
+    // or equal.
+    //
+    double linkSize = std::sqrt(std::abs(xab*xab + yab*yab));
+
+    double linkNormX = std::max(std::abs(xa),std::abs(xb));
+    double linkNormY = std::max(std::abs(ya),std::abs(yb));
+    double linkNorm  = std::max(linkNormX,linkNormY);
+
+    if(linkSize < tol*(linkNorm + 0.01))
+    {
+        d = std::sqrt(std::abs((xp-xa)*(xp-xa)+ (yp-ya)*(yp-ya)));
+    	if(d < tol) {s = 0.0; return 1;}
+    	return 0;
+    }
+
 	s = ((xa - xp)*xab + (ya - yp)*yab)/(xab*xab + yab*yab);
 
     double xpl  =     xp - (xa*(1.0 - s) + s*xb);
@@ -64,19 +82,19 @@ double xp, double yp, double tol, double& s, double& d) const
     double tol2 =     tol*tol;
 
     if(((0.0 <= s)&&(s <= 1.0))&&(d2 < tol2))
-    {d = std::sqrt(d2); return 1;}
+    {d = std::sqrt(std::abs(d2)); return 1;}
 
     double xpb = (xp - xb);
     double ypb = (yp - yb);
 
     if((1.0 < s)&&((xpb*xpb + ypb*ypb) < tol2))
-    {d = std::sqrt(xpb*xpb + ypb*ypb); return 1;}
+    {d = std::sqrt(std::abs(xpb*xpb + ypb*ypb)); return 1;}
 
     double xpa = (xp - xa);
     double ypa = (yp - ya);
 
     if((s <  0.0)&&((xpa*xpa + ypa*ypa) < tol2))
-    {d = std::sqrt(xpa*xpa + ypa*ypa); return 1;}
+    {d = std::sqrt(std::abs(xpa*xpa + ypa*ypa)); return 1;}
 
     return 0;
 }
@@ -235,8 +253,8 @@ int linkIntersection(const double* Qx, const double* Qy,const double* Rx , const
     B[0] = Rx[0] - Qx[0];
     B[1] = Ry[0] - Qy[0];
 
-    double rScale0 = std::sqrt(A[0][0]*A[0][0] + A[0][1]*A[0][1]);
-    double rScale1 = std::sqrt(A[1][0]*A[1][0] + A[1][1]*A[1][1]);
+    double rScale0 = std::sqrt(std::abs(A[0][0]*A[0][0] + A[0][1]*A[0][1]));
+    double rScale1 = std::sqrt(std::abs(A[1][0]*A[1][0] + A[1][1]*A[1][1]));
 
     if((rScale0 < tol) ||( rScale1 < tol))
     {
@@ -258,6 +276,7 @@ int linkIntersection(const double* Qx, const double* Qy,const double* Rx , const
     B[0] = Ry[0] - Qy[0];
     }
 
+
     A[1][1] = A[1][1] - (A[1][0]/A[0][0])*A[0][1];
     B[1]    = B[1]    - (A[1][0]/A[0][0])*B[0];
 
@@ -269,6 +288,7 @@ int linkIntersection(const double* Qx, const double* Qy,const double* Rx , const
 
     double s1 =  B[1]/A[1][1];
     double s0 = (B[0] - A[0][1]*s1)/A[0][0];
+
 
     if(((s1 > 0.0)&&(s1 < 1.0))&&((s0 > 0.0)&&(s0 < 1.0)))
     {s = s0; return 1;}

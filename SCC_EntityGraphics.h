@@ -87,6 +87,23 @@ void draw(const XYrectangleEntity &R)
 	plot(x,y,5);
 }
 
+void fill(const XYrectangleEntity &R)
+{
+	double  x[5];
+	double  y[5];
+	double x_a    =  R.getLowerLeftXpoint();
+	double y_a    =  R.getLowerLeftYpoint();
+	double x_b    =  R.getUpperRightXpoint();
+	double y_b    =  R.getUpperRightYpoint();
+	x[0] = x_a; y[0] = y_a;
+	x[1] = x_b; y[1] = y_a;
+	x[2] = x_b; y[2] = y_b;
+	x[3] = x_a; y[3] = y_b;
+	x[4] = x_a; y[4] = y_a;
+	region(x,y,5);
+}
+
+
 void draw(const PolygonEntity &P)
 {
     std::vector<double> x = P.getXvertices();
@@ -98,6 +115,16 @@ void draw(const PolygonEntity &P)
     }
 }
 
+void fill(const PolygonEntity &P)
+{
+    std::vector<double> x = P.getXvertices();
+    std::vector<double> y = P.getYvertices();
+    long n = P.getSideCount();
+    if(n != 0)
+    {
+    	region(&x[0],&y[0],n+1);
+    }
+}
 
 void draw(const CircleEntity &C)
 {
@@ -116,6 +143,28 @@ void draw(const CircleEntity &C)
 	}
 
 	plot(x,y,nTheta + 1);
+
+	delete [] x;
+	delete [] y;
+}
+
+void fill(const CircleEntity &C)
+{
+	double center_x = C.getXcenter();
+	double center_y = C.getYcenter();
+	double radius   = C.getRadius();
+	long i;
+	long nTheta = 50;
+	double dTheta = (2.0*SCC_PI)/double(nTheta);
+	double* x = new double[nTheta +1];
+	double* y = new double[nTheta +1];
+	for(i = 1; i <= 51; i++)
+	{
+	x[i-1] =  center_x + radius*cos(dTheta*double((i-1)));
+	y[i-1] =  center_y + radius*sin(dTheta*double((i-1)));
+	}
+
+	region(x,y,nTheta + 1);
 
 	delete [] x;
 	delete [] y;
@@ -146,6 +195,33 @@ void draw(const CombinedEntity& E)
      }
 	}
 }
+
+void fill(const CombinedEntity& E)
+{
+	CircleEntity       C;
+	XYrectangleEntity  R;
+	PolygonEntity      P;
+	for(long i = 0; i < E.getEntityCount(); i++)
+	{
+     if(E[i].getEntityType() == SCC::GeoType::CIRCLE)
+     {
+        fill(static_cast<CircleEntity&>(E[i]));
+     }
+     else if(E[i].getEntityType() == SCC::GeoType::XY_RECTANGLE)
+     {
+        fill(static_cast<XYrectangleEntity&>(E[i]));
+     }
+     else if(E[i].getEntityType() == SCC::GeoType::POLYGON)
+     {
+        fill(static_cast<PolygonEntity&>(E[i]));
+     }
+     else if(E[i].getEntityType() == SCC::GeoType::COMBINED)
+     {
+        fill(static_cast<CombinedEntity&>(E[i]));
+     }
+	}
+}
+
 
 };
 }

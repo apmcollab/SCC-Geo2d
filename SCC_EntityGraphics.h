@@ -26,7 +26,7 @@
 */
 #include <vector>
 
-#include "CppGraphics/gprocess.h"
+#include "CppGraphics/CAMgraphics.h"
 
 
 #include "SCC_XYrectangleEntity.h"
@@ -63,11 +63,11 @@
 
 namespace SCC
 {
-class EntityGraphics : public CAMgraphicsProcess
+class EntityGraphics : public CAMgraphics
 {
 public :
 
-EntityGraphics(): CAMgraphicsProcess() {};
+EntityGraphics(): CAMgraphics() {};
 
 virtual ~EntityGraphics(){};
 

@@ -228,7 +228,10 @@ friend std::istream& operator >>(std::istream& in_stream, SCC::CombinedEntity& A
 //                    Equality/Inequality
 //********************************************************************************
 //
-bool  operator ==(const CombinedEntity &E) const
+
+
+
+bool  equals(const CombinedEntity &E) const
 {
 	if(entityCount != E.entityCount) return false;
 
@@ -239,7 +242,7 @@ bool  operator ==(const CombinedEntity &E) const
 	}
 	return flag;
 }
-bool operator !=(const CombinedEntity &E) const
+bool notEquals(const CombinedEntity &E) const
 {
 	return !(*this == E);
 }

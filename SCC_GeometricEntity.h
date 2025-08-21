@@ -103,8 +103,8 @@ public :
 //
 //  Equality/Inequality
 //
-    virtual bool  operator ==(const GeometricEntity&)const {return 0;};
-    virtual bool operator !=(const GeometricEntity&)const {return 0;};
+    virtual bool  operator == (const GeometricEntity&)const {return 0;};
+    virtual bool  operator != (const GeometricEntity&)const {return 0;};
     virtual void getConstructorData(std::vector<double>&, std::vector<long>&, std::string&) const {};
     virtual bool compareConstructorData(std::vector<double>&, std::vector<long>&, std::string&)const {return 0;};
 //
